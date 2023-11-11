@@ -9,8 +9,8 @@ phases:
       python: 3.9
   post_build:
     commands:
-      - aws s3api create-bucket --bucket CCBD_hw2_frontend --region us-east-1
-      - aws s3 cp index s3://CCBD_hw2_frontend/ --recursive
+      - aws s3api create-bucket --bucket CCBD-hw2-frontend --region us-east-1
+      - aws s3 cp index s3://CCBD-hw2-frontend/ --recursive
 
 artifacts:
   files:
