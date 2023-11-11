@@ -10,5 +10,6 @@ phases:
 
 artifacts:
   files:
-    - '*/*/*'
+    - 'index/*'
+    - 'index/*/'
   name: frontend
