@@ -7,6 +7,10 @@ phases:
   install:
     runtime-versions:
       python: 3.9
+  post_build:
+    commands:
+      - aws s3api create-bucket --bucket CCBD_hw2_frontend --region us-east-1
+      - aws s3 cp index s3://CCBD_hw2_frontend/ --recursive
 
 artifacts:
   files:
