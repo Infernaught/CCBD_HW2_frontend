@@ -1,0 +1,14 @@
+version: 0.2
+
+proxy:
+  logs: yes
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.9
+
+artifacts:
+  files:
+    - 'index/*'
+  name: frontend
