@@ -17,14 +17,20 @@ $(document).ready(function() {
     function callAlbumPutApi(img, labels, filename) {
         if (labels == '') {
             var params = {
-            }
+                bucket: 'hw2-photos-us-east1',
+                object: filename
+            };
             var additionalParams = {
                 headers: {
-                    'Content-Type': 'text/base64'
+                    customLabel: JSON.stringify(labels),
+                    contentType: 'image/' + filename.split('.')[1]
                 }
-            }
-            var body = {}
-            return sdk.uploadPut(params, body, additionalParams);
+            };
+            var body = {img};
+            console.log(params);
+            console.log(additionalParams);
+            console.log(body)
+            return sdk.folderItemPut(params, body, additionalParams);
         }
     }
 
@@ -69,20 +75,15 @@ $(document).ready(function() {
                         }
                     }
                 } else {
-                    console.log('Oops, something went wrong. Please try again.');
+                    var label_text = 'No image found.';
+                    displayCanvas.append($('<h2>').text(label_text));
                 }
             })
             .catch((error) => {
                 console.log('an error occurred', error);
             });
       }
-    }
-
-    function appendDisplay(text) {
-        const userMessage = $('<p>').text(text);
-        userMessageDiv.append(userMessage);
-        userInputField.val('');
-    }
+    };
 
     // Add event listeners for button click and Enter key press
     submitButton.click(submitUserInput);
@@ -92,24 +93,52 @@ $(document).ready(function() {
       }
     });
 
+    function clickUpload() {
+        var file_data = $('#file')[0].files[0];
+        console.log($('#file'));
+        // const canv = document.createElement("canvas");;
+        // //var _URL = window.URL || window.webkitURL;
+        // var img = new Image();
+        // img.onload = function() {
+        //     canv.height = img.naturalHeight;
+        //     canv.width = img.naturalWidth;
+        // };
+        // var reader = new FileReader();
+
+        // reader.onload = function(event) {
+        //     img.src = event.target.result;
+        // };
+
+        // reader.readAsDataURL(file_data);
+        // //img.src = _URL.createObjectURL(file_data);
+        // var ctx = canv.getContext('2d');
+        // ctx.drawImage(img, 0, 0);
+        // const dataURL = canv.toDataURL();
+        // console.log(dataURL);
+        var labels = $('#labelInput').val().split(',');
+        // dataURL.replace('data:', '').replace(/^.+,/, '')
+        var response = callAlbumPutApi(file_data, labels, file_data.name);
+    }
+
     $('input[name=imgUpload]').change(function () {
-        async function clickUpload() {
-            function getBase64(file, onLoadCallback) {
-                return new Promise(function(resolve, reject) {
-                    var reader = new FileReader();
-                    reader.onload = function() { resolve(reader.result); };
-                    reader.readAsDataURL(file);
-                });
-            }
-            var file_data = $('#file')[0].files[0];
-            var promise = getBase64(file_data);
-            // upload to S3
-            var base64 = '';
-            base64 = await promise;
-            var labels = $('#labelInput').val().split(',');
-            callAlbumPutApi(base64, labels, file_data.name);
-        }
-        //console.log($('#file'));
+        $('#uploadResult').empty();
+        // async function clickUpload() {
+        //     function getBase64(file, onLoadCallback) {
+        //         return new Promise(function(resolve, reject) {
+        //             var reader = new FileReader();
+        //             reader.onload = function() { resolve(reader.result); };
+        //             reader.readAsDataURL(file);
+        //         });
+        //     }
+        //     var file_data = $('#file')[0].files[0];
+        //     var promise = getBase64(file_data);
+        //     // upload to S3
+        //     var base64 = '';
+        //     base64 = await promise;
+        //     var labels = $('#labelInput').val().split(',');
+        //     var response = callAlbumPutApi(base64, labels, file_data.name);
+        //     console.log(response);
+        // }
         var input_label = $('<input>');
         input_label.attr('type', 'text');
         input_label.attr('id','labelInput');
