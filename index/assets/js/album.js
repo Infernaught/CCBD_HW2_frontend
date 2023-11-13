@@ -24,6 +24,7 @@ $(document).ready(function() {
         var additionalParams = {
         };
         var body = img;
+        console.log(params);
         return sdk.folderItemPut(params, body, additionalParams);
     }
 
@@ -79,10 +80,14 @@ $(document).ready(function() {
     };
 
     // Add event listeners for button click and Enter key press
-    submitButton.click(submitUserInput);
+    submitButton.click(function() {
+        submitUserInput();
+        userInputField.val('');
+    });
     userInputField.keydown(function(event) {
       if (event.key === 'Enter') {
         submitUserInput();
+        userInputField.val('');
       }
     });
 
@@ -94,6 +99,7 @@ $(document).ready(function() {
         var labels = $('#labelInput').val().split(',');
         callAlbumPutApi(img_encoding, labels, file_data.name).then((response) => {
             console.log(response);
+            $('#uploadResult').empty();
             var result = $('<h3>');
             if (response.status == '200') {
                 result.text('Upload success!');
@@ -105,6 +111,7 @@ $(document).ready(function() {
     }
 
     document.getElementById('file').addEventListener('change', event => {
+        $('#uploadExtra').empty()
         $('#uploadResult').empty();
         // async function clickUpload() {
         //     function getBase64(file, onLoadCallback) {
@@ -140,11 +147,11 @@ $(document).ready(function() {
                 clickUpload();
             }
           });
-        $('#uploadResult').append(input_label);
+        $('#uploadExtra').append(input_label);
         var upload_button = $('<button>')
         upload_button.attr('id', 'upload');
         upload_button.html('Upload');
         upload_button.click(clickUpload);
-        $('#uploadResult').append(upload_button);
+        $('#uploadExtra').append(upload_button);
     });
 });
