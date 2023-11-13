@@ -15,23 +15,16 @@ $(document).ready(function() {
     }
 
     function callAlbumPutApi(img, labels, filename) {
-        if (labels == '') {
-            var params = {
-                bucket: 'hw2-photos-us-east1',
-                object: filename
-            };
-            var additionalParams = {
-                headers: {
-                    customLabel: JSON.stringify(labels),
-                    contentType: 'image/' + filename.split('.')[1]
-                }
-            };
-            var body = {img};
-            console.log(params);
-            console.log(additionalParams);
-            console.log(body)
-            return sdk.folderItemPut(params, body, additionalParams);
-        }
+        var params = {
+            bucket: 'hw2-photos-us-east1',
+            object: filename,
+            customLabel: JSON.stringify(labels),
+            contentType: 'image/' + filename.split('.')[1]
+        };
+        var additionalParams = {
+        };
+        var body = img;
+        return sdk.folderItemPut(params, body, additionalParams);
     }
 
     // Function to handle user input submission
@@ -95,32 +88,23 @@ $(document).ready(function() {
 
     function clickUpload() {
         var file_data = $('#file')[0].files[0];
-        console.log($('#file'));
-        // const canv = document.createElement("canvas");;
-        // //var _URL = window.URL || window.webkitURL;
-        // var img = new Image();
-        // img.onload = function() {
-        //     canv.height = img.naturalHeight;
-        //     canv.width = img.naturalWidth;
-        // };
-        // var reader = new FileReader();
-
-        // reader.onload = function(event) {
-        //     img.src = event.target.result;
-        // };
-
-        // reader.readAsDataURL(file_data);
-        // //img.src = _URL.createObjectURL(file_data);
-        // var ctx = canv.getContext('2d');
-        // ctx.drawImage(img, 0, 0);
-        // const dataURL = canv.toDataURL();
-        // console.log(dataURL);
+        var output_img = document.getElementById('output');
+        img_encoding = output_img.src.replace('data:', '').replace(/^.+,/, '');
+        //console.log(img_encoding);
         var labels = $('#labelInput').val().split(',');
-        // dataURL.replace('data:', '').replace(/^.+,/, '')
-        var response = callAlbumPutApi(file_data, labels, file_data.name);
+        callAlbumPutApi(img_encoding, labels, file_data.name).then((response) => {
+            console.log(response);
+            var result = $('<h3>');
+            if (response.status == '200') {
+                result.text('Upload success!');
+            } else {
+                result.text('Upload failed!');
+            }
+            $('#uploadResult').append(result);
+        })
     }
 
-    $('input[name=imgUpload]').change(function () {
+    document.getElementById('file').addEventListener('change', event => {
         $('#uploadResult').empty();
         // async function clickUpload() {
         //     function getBase64(file, onLoadCallback) {
@@ -139,6 +123,13 @@ $(document).ready(function() {
         //     var response = callAlbumPutApi(base64, labels, file_data.name);
         //     console.log(response);
         // }
+        var output_img = document.getElementById('output');
+        output_img.src = '';
+        const reader = new FileReader();
+        reader.addEventListener('load', event => {
+            output_img.src = event.target.result;
+        });
+        reader.readAsDataURL($('#file')[0].files[0]);
         var input_label = $('<input>');
         input_label.attr('type', 'text');
         input_label.attr('id','labelInput');
