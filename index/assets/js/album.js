@@ -101,6 +101,9 @@ $(document).ready(function() {
             labels = [];
         } else {
             labels = labels.split(',');
+            for (let i = 0; i < labels.length; i++) {
+                labels[i] = labels[i][0].toUpperCase() + labels[i].substr(1);
+            }
         }
         callAlbumPutApi(img_encoding, labels, file_data.name).then((response) => {
             console.log(response);
