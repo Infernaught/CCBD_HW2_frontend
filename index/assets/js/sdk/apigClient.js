@@ -53,7 +53,7 @@ apigClientFactory.newClient = function (config) {
 
     
     // extract endpoint and path from url
-    var invokeUrl = 'https://hk5v5cdowc.execute-api.us-east-1.amazonaws.com/dev2';
+    var invokeUrl = 'https://hd78aem294.execute-api.us-east-1.amazonaws.com/dev2';
     var endpoint = /(^https?:\/\/[^\/]+)/g.exec(invokeUrl)[1];
     var pathComponent = invokeUrl.substring(endpoint.length);
 
@@ -122,13 +122,13 @@ apigClientFactory.newClient = function (config) {
     apigClient.folderItemOptions = function (params, body, additionalParams) {
         if(additionalParams === undefined) { additionalParams = {}; }
         
-        apiGateway.core.utils.assertParametersDefined(params, [], ['body']);
+        apiGateway.core.utils.assertParametersDefined(params, ['customLabel', 'object', 'contentType', 'bucket'], ['body']);
         
         var folderItemOptionsRequest = {
             verb: 'options'.toUpperCase(),
             path: pathComponent + uritemplate('/folder/item').expand(apiGateway.core.utils.parseParametersToObject(params, [])),
-            headers: apiGateway.core.utils.parseParametersToObject(params, []),
-            queryParams: apiGateway.core.utils.parseParametersToObject(params, []),
+            headers: apiGateway.core.utils.parseParametersToObject(params, ['customLabel', 'contentType', ]),
+            queryParams: apiGateway.core.utils.parseParametersToObject(params, ['object', 'bucket']),
             body: body
         };
         
