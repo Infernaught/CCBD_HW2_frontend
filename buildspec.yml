@@ -10,6 +10,7 @@ phases:
   post_build:
     commands:
       - aws s3 cp index s3://ccbd-hw2-frontend/ --recursive
+      - aws s3 cp index s3://hw2-frontend-us-east1-cf/ --recursive
 
 artifacts:
   files:
