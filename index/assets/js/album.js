@@ -16,7 +16,7 @@ $(document).ready(function() {
 
     function callAlbumPutApi(img, labels, filename) {
         var params = {
-            bucket: 'hw2-photos-us-east1',
+            bucket: 'hw2-photos-us-east1-cf',
             object: filename,
             customLabel: JSON.stringify(labels),
             contentType: 'image/' + filename.split('.')[1]
