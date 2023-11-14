@@ -96,7 +96,12 @@ $(document).ready(function() {
         var output_img = document.getElementById('output');
         img_encoding = output_img.src.replace('data:', '').replace(/^.+,/, '');
         //console.log(img_encoding);
-        var labels = $('#labelInput').val().split(',');
+        var labels = $('#labelInput').val();
+        if (labels == '') {
+            labels = [];
+        } else {
+            labels = labels.split(',');
+        }
         callAlbumPutApi(img_encoding, labels, file_data.name).then((response) => {
             console.log(response);
             $('#uploadResult').empty();
